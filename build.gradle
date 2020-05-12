@@ -1,0 +1,50 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+}
+
+group = 'com.kodilla'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://maven.vaadin.com/vaadin-addons" }
+
+}
+
+ext {
+    set('vaadinVersion', "14.1.27")
+}
+
+dependencies {
+    compile group: 'org.vaadin.crudui', name: 'crudui', version: '4.2.0'
+    compile group: 'com.vaadin', name: 'vaadin-crud-flow', version: '1.1.1'
+
+//    compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.3.1.RELEASE'
+//    compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.3.1.RELEASE'
+
+    implementation 'com.vaadin:vaadin-spring-boot-starter'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.vaadin:vaadin-bom:${vaadinVersion}"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
