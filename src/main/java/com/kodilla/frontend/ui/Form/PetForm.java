@@ -1,26 +1,33 @@
-package com.kodilla.frontend.ui.Forms;
+package com.kodilla.frontend.ui.Form;
 
 import com.kodilla.frontend.client.VetSystemClient;
-import com.kodilla.frontend.domain.Medication;
-import com.kodilla.frontend.domain.Unit;
-import com.kodilla.frontend.ui.MedicationView;
+import com.kodilla.frontend.domain.Pet;
+import com.kodilla.frontend.ui.PetView;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
-public class MedicationForm extends FormLayout {
+public class PetForm extends FormLayout {
 
-    private final MedicationView medicationView;
+    private final PetView petView;
     private VetSystemClient vetSystemClient = new VetSystemClient();
 
-    private TextField medicationName = new TextField("Medication");
-    private TextField dosePerKg = new TextField("Dose per Kg");
-    private ComboBox<Unit> unit = new ComboBox<>("Unit");
+    private TextField name = new TextField("Name");
+    private TextField chipId = new TextField("Chip ID");
+    private TextField kind = new TextField("Kind");
+
+    private DatePicker birthDate = new DatePicker("Date of birth");
+    private DatePicker dateOfSterilization = new DatePicker("Date of sterilisation");
+
+    private Checkbox sterilised = new Checkbox("Sterilised",false);
+    private Checkbox aggressive = new Checkbox("Aggressive",false);
+
 
 
     Button save = new Button("Save");
@@ -28,26 +35,29 @@ public class MedicationForm extends FormLayout {
     Button delete = new Button("Delete");
     Button close = new Button("Cancel");
 
-    Binder<Medication> binder =
-            new Binder<>(Medication.class);
+    Binder<Pet> binder =
+            new Binder<>(Pet.class);
 
-    private Medication medication = binder.getBean();
+    private Pet pet = binder.getBean();
 
-    public MedicationForm(MedicationView medicationView) {
-        this.medicationView = medicationView;
-        unit.setItems(Unit.values());
+    public PetForm(PetView petView) {
+        this.petView = petView;
+
         binder.bindInstanceFields(this);
-        binder.setBean(new Medication());
+        binder.setBean(new Pet());
 
-        add(medicationName,
-                dosePerKg,
-                unit,
+        add(name,
+                chipId,
+                kind,
+                birthDate,
+                sterilised,
+                dateOfSterilization,
+                aggressive,
                 createButtonsLayout());
         save.addClickListener(event -> save());
         update.addClickListener(event -> update());
         delete.addClickListener(event -> delete());
         close.addClickListener(event -> close());
-
     }
 
     private HorizontalLayout createButtonsLayout() {
@@ -62,35 +72,35 @@ public class MedicationForm extends FormLayout {
     }
 
     private void update() {
-        medication = binder.getBean();
-        vetSystemClient.updateMedication(medication);
-        medicationView.refresh();
-        setMedication(null);
+        pet = binder.getBean();
+        vetSystemClient.updatePet(pet);
+        petView.refresh();
+        setPet(null);
     }
 
     private void save() {
 
-        medication = binder.getBean();
-        vetSystemClient.createMedication(medication);
-        medicationView.refresh();
-        setMedication(null);
+        pet = binder.getBean();
+        vetSystemClient.createPet(pet);
+        petView.refresh();
+        setPet(null);
     }
 
     private void delete() {
-        medication = binder.getBean();
-        vetSystemClient.deleteMedication(medication);
-        medicationView.refresh();
+        pet = binder.getBean();
+        vetSystemClient.deletePet(pet);
+        petView.refresh();
     }
 
     private void close() {
-        setMedication(null);
+        setPet(null);
     }
 
-    public void setMedication(Medication medication) {
+    public void setPet(Pet pet) {
 
-        binder.setBean(medication);
+        binder.setBean(pet);
 
-        if (medication == null) {
+        if (pet == null) {
             setVisible(false);
         } else {
             setVisible(true);

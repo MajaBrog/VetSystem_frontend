@@ -29,7 +29,16 @@ public class VetSystemClient {
             return new ArrayList<>();
         }
     }
+    public Medication getMedication(Long id) {
 
+        String url = backendURL + "medication/"+id;
+
+        try {
+            return restTemplate.getForObject(url, Medication.class);
+        } catch (RestClientException e) {
+            return null;
+        }
+    }
     public List<Medication> filterMedications(String text) {
 
         String url = backendURL + "medication/filter/" + text;
@@ -71,6 +80,18 @@ public class VetSystemClient {
 
     public void deleteMedication(Medication medication) {
         restTemplate.delete(backendURL + "medication/" + medication.getId());
+    }
+
+    public Vaccination getVaccination(Long id) {
+
+        String url = backendURL + "vaccination/"+id;
+
+        try {
+
+            return restTemplate.getForObject(url, Vaccination.class);
+        } catch (RestClientException e) {
+            return null;
+        }
     }
 
     public List<Vaccination> getVaccinations() {
@@ -302,6 +323,17 @@ public class VetSystemClient {
             return new ArrayList<>();
         }
     }
+    public List<Visit> filterVisit(String text) {
+
+        String url = backendURL + "visit/filter/"+text;
+
+        try {
+            Visit[] Response = restTemplate.getForObject(url, Visit[].class);
+            return Arrays.asList(Optional.ofNullable(Response).orElse(new Visit[0]));
+        } catch (RestClientException e) {
+            return new ArrayList<>();
+        }
+    }
 
     public List<Visit> getPetVisits(Long petId) {
 
@@ -318,11 +350,11 @@ public class VetSystemClient {
     public void updateVisit(Visit visit) {
         String url = backendURL + "visit";
 
-        String json = "{\"dateOfVisit\":" + visit.getDateOfVisit() + "," +
-                "\"petId\":\"" + visit.getPetId() + "\"," +
+        String json = "{\"petId\":\"" + visit.getPetId() + "\"," +
                 "\"diagnose\":\"" + visit.getDiagnose() + "\"," +
                 "\"AdditionalRecommendation\":\"" + visit.getAdditionalRecommendation() + "\"," +
                 "\"weight\":" + visit.getWeight() + "}";
+
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -334,12 +366,11 @@ public class VetSystemClient {
     public void createVisit(Visit visit) {
         String url = backendURL + "visit";
 
-        String json = "{\"dateOfVisit\":" + visit.getDateOfVisit() + "," +
-                "\"petId\":\"" + visit.getPetId() + "\"," +
+        String json = "{\"petId\":\"" + visit.getPetId() + "\"," +
                 "\"diagnose\":\"" + visit.getDiagnose() + "\"," +
                 "\"AdditionalRecommendation\":\"" + visit.getAdditionalRecommendation() + "\"," +
                 "\"weight\":" + visit.getWeight() + "}";
-
+        System.out.println(json);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(json, headers);
@@ -437,4 +468,89 @@ public class VetSystemClient {
         HttpEntity<String> request = new HttpEntity<String>(json, headers);
         restTemplate.postForObject(url, request, ChronicDisease.class);
     }
+
+    public Visit_Medication getVisit_Medication(Long id) {
+
+        String url = backendURL + "visit_medication/" + id;
+
+        return restTemplate.getForObject(url, Visit_Medication.class);
+    }
+
+    public List<Visit_Medication> getVisit_Medications() {
+
+        String url = backendURL + "visit_medication";
+
+        try {
+            Visit_Medication[] Response = restTemplate.getForObject(url, Visit_Medication[].class);
+            return Arrays.asList(Optional.ofNullable(Response).orElse(new Visit_Medication[0]));
+        } catch (RestClientException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Visit_Medication> getVisitMedications(Long visitId) {
+
+        String url = backendURL + "visit_medication/visit/"+ visitId;
+
+        try {
+            Visit_Medication[] Response = restTemplate.getForObject(url, Visit_Medication[].class);
+            return Arrays.asList(Optional.ofNullable(Response).orElse(new Visit_Medication[0]));
+        } catch (RestClientException e) {
+            return new ArrayList<>();
+        }
+    }
+
+
+    public void updateVisit_Medication(Visit_Medication visit_medication) {
+        String url = backendURL + "visit_medication";
+
+        String json = "{\"visitId\":\"" + visit_medication.getVisitId() + "\"," +
+                "\"medicationId\":\"" + visit_medication.getMedicationId() + "\"," +
+                "\"dose\":\"" + visit_medication.getDose() + "\"," +
+                "\"unit\":\"" + visit_medication.getUnit() + "\"}";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(json, headers);
+        restTemplate.exchange(url, HttpMethod.PUT, request, Void.class);
+
+    }
+
+    public void createVisit_Medication(Visit_Medication visit_medication) {
+        String url = backendURL + "visit_medication";
+
+        String json = "{\"visitId\":\"" + visit_medication.getVisitId() + "\"," +
+                "\"medicationId\":\"" + visit_medication.getMedicationId() + "\"," +
+                "\"dose\":\"" + visit_medication.getDose() + "\"," +
+                "\"unit\":\"" + visit_medication.getUnit() + "\"}";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(json, headers);
+        restTemplate.postForObject(url, request, Visit_Medication.class);
+    }
+
+    public void deleteVisit_Medication(Visit_Medication visit_medication) {
+        restTemplate.delete(backendURL + "visit_medication/" + visit_medication.getId());
+    }
+
+    public void createVisit_Vaccination(Visit_Vaccination visit_vaccination) {
+        String url = backendURL + "visit_vaccination";
+
+        String json = "{\"visitId\":\"" + visit_vaccination.getVisitId() + "\"," +
+                "\"vaccinationId\":\"" + visit_vaccination.getVaccinationId() + "\"," +
+                "\"dose\":\"" + visit_vaccination.getDose() + "\"," +
+                "\"unit\":\"" + visit_vaccination.getUnit() + "\"}";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(json, headers);
+        restTemplate.postForObject(url, request, Visit_Vaccination.class);
+    }
+
+    public void deleteVisit_Vaccination(Visit_Vaccination visit_vaccination) {
+        restTemplate.delete(backendURL + "visit_vaccination/" + visit_vaccination.getId());
+    }
+
+
 }

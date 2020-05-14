@@ -1,17 +1,15 @@
 
-package com.kodilla.frontend.ui.Forms;
+package com.kodilla.frontend.ui.Form;
 
         import com.kodilla.frontend.client.VetSystemClient;
         import com.kodilla.frontend.domain.Visit;
-        import com.kodilla.frontend.domain.Unit;
         import com.kodilla.frontend.ui.VisitView;
         import com.vaadin.flow.component.Key;
         import com.vaadin.flow.component.button.Button;
         import com.vaadin.flow.component.button.ButtonVariant;
-        import com.vaadin.flow.component.checkbox.Checkbox;
-        import com.vaadin.flow.component.datepicker.DatePicker;
         import com.vaadin.flow.component.formlayout.FormLayout;
         import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+        import com.vaadin.flow.component.orderedlayout.VerticalLayout;
         import com.vaadin.flow.component.textfield.TextField;
         import com.vaadin.flow.data.binder.Binder;
         import com.vaadin.flow.data.converter.StringToIntegerConverter;
@@ -25,10 +23,8 @@ public class VisitForm extends FormLayout {
     private TextField AdditionalRecommendation = new TextField("Additional recommendation");
     private TextField weight = new TextField("Weight");
 
-    private DatePicker dateOfVisit = new DatePicker("Date of visit");
-
-
-
+    Button addMedication = new Button("Add Medication");
+    Button addVaccination = new Button("Add Vaccination");
     Button save = new Button("Save");
     Button update = new Button("Update");
     Button delete = new Button("Delete");
@@ -48,8 +44,20 @@ public class VisitForm extends FormLayout {
         add(diagnose,
                 AdditionalRecommendation,
                 weight,
-                dateOfVisit,
                 createButtonsLayout());
+
+        addMedication.addClickListener(event -> {
+            saveWithoutClosing();
+            save.setVisible(false);
+            update.setVisible(true);
+            setAddMedication();
+        });
+        addVaccination.addClickListener(event -> {
+            saveWithoutClosing();
+            save.setVisible(false);
+            update.setVisible(true);
+            setAddVaccination();
+        });
         save.addClickListener(event -> save());
         update.addClickListener(event -> update());
         delete.addClickListener(event -> delete());
@@ -57,7 +65,19 @@ public class VisitForm extends FormLayout {
 
     }
 
-    private HorizontalLayout createButtonsLayout() {
+    private void setAddMedication(){
+        visit = binder.getBean();
+        visitView.addMedication(visit.getId());
+        visitView.refresh();
+    }
+
+    private void setAddVaccination(){
+        visit = binder.getBean();
+        visitView.addMedication(visit.getId());
+        visitView.refresh();
+    }
+
+    private VerticalLayout createButtonsLayout() {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -65,26 +85,36 @@ public class VisitForm extends FormLayout {
         save.addClickShortcut(Key.ENTER);
         update.addClickShortcut(Key.ENTER);
         close.addClickShortcut(Key.ESCAPE);
-        return new HorizontalLayout(save, update, delete, close);
+        HorizontalLayout mainButtons=new HorizontalLayout(save, update, delete, close);
+        HorizontalLayout addButtons=new HorizontalLayout(addMedication, addVaccination);
+        return new VerticalLayout(addButtons,mainButtons);
     }
 
     private void update() {
         visit = binder.getBean();
+        visit.setPetId(visitView.getPetId());
         vetSystemClient.updateVisit(visit);
         visitView.refresh();
         setVisit(null);
     }
 
     private void save() {
-
         visit = binder.getBean();
+        visit.setPetId(visitView.getPetId());
         vetSystemClient.createVisit(visit);
         visitView.refresh();
         setVisit(null);
     }
+    private void saveWithoutClosing() {
+        visit = binder.getBean();
+        visit.setPetId(visitView.getPetId());
+        vetSystemClient.createVisit(visit);
+        visitView.refresh();
+    }
 
     private void delete() {
         visit = binder.getBean();
+        visit.setPetId(visitView.getPetId());
         vetSystemClient.deleteVisit(visit);
         visitView.refresh();
     }

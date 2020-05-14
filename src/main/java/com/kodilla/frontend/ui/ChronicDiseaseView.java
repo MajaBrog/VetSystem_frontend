@@ -2,17 +2,17 @@ package com.kodilla.frontend.ui;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.ChronicDisease;
-import com.kodilla.frontend.ui.Forms.ChronicDiseaseForm;
+import com.kodilla.frontend.ui.Form.ChronicDiseaseForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.router.Route;
 
 @Route(value = "chronicDisease", layout = MainView.class)
-public class ChronicDiseaseView extends VerticalLayout{
+public class ChronicDiseaseView extends VerticalLayout {
 
     VetSystemClient vetSystemClient = new VetSystemClient();
     private Grid<ChronicDisease> grid = new Grid<>(ChronicDisease.class);
@@ -24,6 +24,13 @@ public class ChronicDiseaseView extends VerticalLayout{
         filterText.setPlaceholder("Filter by name...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.EAGER);
+        filterText.addValueChangeListener(e -> {
+            if (e.getValue() == "") {
+                refresh();
+            } else {
+                update();
+            }
+        });
         configureGrid();
 
         Button addNewChronicDiseaseBtn = new Button("Add new chronicDisease");
@@ -47,18 +54,23 @@ public class ChronicDiseaseView extends VerticalLayout{
 
         chronicDiseaseForm.setChronicDisease(null);
 
-        grid.asSingleSelect().addValueChangeListener(event -> {
-                    chronicDiseaseForm.setChronicDisease(grid.asSingleSelect().getValue());
-                    chronicDiseaseForm.hideSaveButton();
-                }
-        );
     }
 
 
     private void configureGrid() {
         grid.setSizeFull();
+        grid.setColumns();
         grid.addColumn(ChronicDisease::getName).setHeader("Chronic Disease");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
+        grid.addComponentColumn(chronicDisease -> {
+            Button edit = new Button("Edit");
+            edit.addClickListener(event -> {
+                        chronicDiseaseForm.setChronicDisease(chronicDisease);
+                        chronicDiseaseForm.hideSaveButton();
+                    }
+            );
+            return edit;
+        });
     }
 
     public void refresh() {
@@ -66,6 +78,9 @@ public class ChronicDiseaseView extends VerticalLayout{
         grid.setItems(vetSystemClient.getChronicDiseases());
     }
 
+    public void update() {
+        grid.setItems(vetSystemClient.filterChronicDiseases(filterText.getValue()));
+    }
 
 
 }

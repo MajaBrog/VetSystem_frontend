@@ -20,4 +20,8 @@ public class Visit_Medication {
         this.dose = dose;
         this.unit = unit;
     }
+
+    public Visit_Medication(Long visitId) {
+        this.visitId = visitId;
+    }
 }

@@ -2,15 +2,12 @@ package com.kodilla.frontend.ui;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.Medication;
-import com.kodilla.frontend.ui.Forms.MedicationForm;
+import com.kodilla.frontend.ui.Form.MedicationForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 
@@ -145,14 +142,13 @@ public class MedicationView extends VerticalLayout {
                         medicationForm.hideSaveButton();
                     }
             );
-//            edit.setEnabled(!editor.isOpen());
-//            editButtons.add(edit);
             return edit;
         });
     }
 
     private void configureGrid() {
         grid.setSizeFull();
+        grid.setColumns();
         grid.addColumn(Medication::getMedicationName).setHeader("Medication");
         grid.addColumn(Medication::getDosePerKg).setHeader("Dose per Kg");
         grid.addColumn(Medication::getUnit).setHeader("Units");

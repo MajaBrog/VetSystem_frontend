@@ -2,7 +2,7 @@ package com.kodilla.frontend.ui;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.Vaccination;
-import com.kodilla.frontend.ui.Forms.VaccinationForm;
+import com.kodilla.frontend.ui.Form.VaccinationForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -35,7 +35,7 @@ public class VaccinationView extends VerticalLayout {
         Button addNewClientBtn = new Button("Add new vaccination");
         addNewClientBtn.addClickListener(e -> {
             grid.asSingleSelect().clear();
-            vaccinationForm.setClient(new Vaccination());
+            vaccinationForm.setVaccination(new Vaccination());
             vaccinationForm.hideEditAndDeleteButton();
         });
 
@@ -50,10 +50,10 @@ public class VaccinationView extends VerticalLayout {
         setSizeFull();
         refresh();
 
-        vaccinationForm.setClient(null);
+        vaccinationForm.setVaccination(null);
 
         grid.asSingleSelect().addValueChangeListener(event -> {
-                    vaccinationForm.setClient(grid.asSingleSelect().getValue());
+                    vaccinationForm.setVaccination(grid.asSingleSelect().getValue());
                     vaccinationForm.hideSaveButton();
                 }
         );
@@ -61,7 +61,7 @@ public class VaccinationView extends VerticalLayout {
 
     private void configureGrid() {
         grid.setSizeFull();
-        grid.setColumns("name", "disease", "dosePerKg", "unit", "mandatory");
+        grid.setColumns();
         grid.addColumn(Vaccination::getName).setHeader("Vaccination");
         grid.addColumn(Vaccination::getDisease).setHeader("Disease");
         grid.addColumn(Vaccination::getDosePerKg).setHeader("Dose per Kg");
@@ -69,15 +69,13 @@ public class VaccinationView extends VerticalLayout {
         grid.addColumn(Vaccination::isMandatory).setHeader("Mandatory");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
-        Grid.Column<Vaccination> editorColumn = grid.addComponentColumn(person -> {
+        grid.addComponentColumn(vaccination -> {
             Button edit = new Button("Edit");
             edit.addClickListener(event -> {
-                        vaccinationForm.setClient(grid.asSingleSelect().getValue());
+                        vaccinationForm.setVaccination(vaccination);
                         vaccinationForm.hideSaveButton();
                     }
             );
-//            edit.setEnabled(!editor.isOpen());
-//            editButtons.add(edit);
             return edit;
         });
     }
@@ -85,6 +83,7 @@ public class VaccinationView extends VerticalLayout {
     public void refresh() {
         grid.setItems(vetSystemClient.getVaccinations());
     }
+
     public void update() {
         grid.setItems(vetSystemClient.filterVaccinations(filterText.getValue()));
     }

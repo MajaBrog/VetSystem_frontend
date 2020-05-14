@@ -2,7 +2,7 @@ package com.kodilla.frontend.ui;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.ChronicDisease_Pet;
-import com.kodilla.frontend.ui.Forms.ChronicDisease_PetForm;
+import com.kodilla.frontend.ui.Form.ChronicDisease_PetForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;

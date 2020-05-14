@@ -3,7 +3,7 @@ package com.kodilla.frontend.ui;
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.Address;
 import com.kodilla.frontend.domain.Client;
-import com.kodilla.frontend.ui.Forms.ClientForm;
+import com.kodilla.frontend.ui.Form.ClientForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -43,15 +43,6 @@ public class ClientView extends VerticalLayout {
             clientForm.hideEditAndDeleteButton();
         });
 
-//        NativeButton button = new NativeButton(
-//                "See Medication List");
-//        button.addClickListener(e ->
-//                button.getUI().ifPresent(ui ->
-//                        ui.navigate("medication"))
-//        );
-
-//        HorizontalLayout toolbar = new HorizontalLayout(filterText,
-//                addNewClientBtn, button);
         HorizontalLayout toolbar = new HorizontalLayout(filterText,
                 addNewClientBtn);
         HorizontalLayout mainContent = new HorizontalLayout(grid, clientForm);
@@ -82,6 +73,16 @@ public class ClientView extends VerticalLayout {
             return address == null ? "-" : address.getStreet() + " " + address.getHouseNumber() + "/" + address.getHomeNumber()
                     + "\n," + address.getPostcode() + " " + address.getCity();
         }).setHeader("Address");
+
+        grid.addComponentColumn(client -> {
+            Button edit = new Button("Edit");
+            edit.addClickListener(event -> {
+                        clientForm.setClient(client);
+                        clientForm.hideSaveButton();
+                    }
+            );
+            return edit;
+        });
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
 

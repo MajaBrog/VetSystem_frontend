@@ -7,7 +7,7 @@ import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.converter.Converter;
 
 public class ChronicDiseaseComboBoxConverter implements Converter<ChronicDisease, Long> {
-    VetSystemClient vetSystemClient=new VetSystemClient();
+
 
     @Override
     public Result<Long> convertToModel(ChronicDisease chronicDisease, ValueContext context) {

@@ -27,4 +27,8 @@ public class Visit {
         this.additionalRecommendation = additionalRecommendation;
         this.weight = weight;
     }
+
+    public Visit(Long petId) {
+        this.petId = petId;
+    }
 }

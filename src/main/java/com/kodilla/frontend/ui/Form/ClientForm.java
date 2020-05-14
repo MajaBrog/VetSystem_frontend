@@ -1,4 +1,4 @@
-package com.kodilla.frontend.ui.Forms;
+package com.kodilla.frontend.ui.Form;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.Address;

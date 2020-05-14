@@ -49,7 +49,7 @@ public class MainView extends AppLayout {
         tabs.add(createTab(VaadinIcon.ARCHIVES, "Visits", VisitView.class));
         tabs.add(createTab(VaadinIcon.PILLS, "Medication", MedicationView.class));
         tabs.add(createTab(VaadinIcon.PILL, "Vaccination", VaccinationView.class));
-//        tabs.add(createTab(VaadinIcon.PILL, "Chronic Diseases", Chro.class));
+        tabs.add(createTab(VaadinIcon.STETHOSCOPE, "Chronic Diseases", ChronicDiseaseView.class));
         final String contextPath = VaadinServlet.getCurrent().getServletContext().getContextPath();
         final Tab logoutTab = createTab(createLogoutLink(contextPath));
         tabs.add(logoutTab);

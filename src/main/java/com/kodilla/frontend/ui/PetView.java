@@ -1,11 +1,8 @@
 package com.kodilla.frontend.ui;
 
 import com.kodilla.frontend.client.VetSystemClient;
-import com.kodilla.frontend.domain.ChronicDisease;
-import com.kodilla.frontend.domain.ChronicDisease_Pet;
 import com.kodilla.frontend.domain.Pet;
-import com.kodilla.frontend.domain.Visit;
-import com.kodilla.frontend.ui.Forms.PetForm;
+import com.kodilla.frontend.ui.Form.PetForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -113,8 +110,6 @@ public class PetView extends VerticalLayout implements AfterNavigationObserver, 
 //                .collect(Collectors.joining( "," ))).setHeader("Chronic diseases");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
-
-
 
     public void refresh() {
 

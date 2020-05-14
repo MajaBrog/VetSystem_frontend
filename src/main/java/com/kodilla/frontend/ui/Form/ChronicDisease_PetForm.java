@@ -1,4 +1,4 @@
-package com.kodilla.frontend.ui.Forms;
+package com.kodilla.frontend.ui.Form;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.ChronicDisease;
@@ -22,11 +22,10 @@ public class ChronicDisease_PetForm extends FormLayout {
     private final ChronicDisease_PetView chronicDisease_petView;
     private VetSystemClient vetSystemClient = new VetSystemClient();
 
-        List<ChronicDisease> chronicDiseaseList = vetSystemClient.getChronicDiseases();
-//
+    List<ChronicDisease> chronicDiseaseList = vetSystemClient.getChronicDiseases();
+
     private ComboBox<ChronicDisease> chronicDiseaseId = new ComboBox<>("Chronic Disease");
-//    private TextField petId = new TextField("PetId");
-//    private TextField chronicDiseaseId = new TextField("Chronic Disease");
+
     private DatePicker dateOfDiagnosis = new DatePicker("Date of diagnosis", LocalDate.now());
 
     Button save = new Button("Save");
@@ -44,16 +43,9 @@ public class ChronicDisease_PetForm extends FormLayout {
         chronicDiseaseId.setItems(chronicDiseaseList);
         chronicDiseaseId.setItemLabelGenerator(ChronicDisease::getName);
         binder.forField(chronicDiseaseId).withConverter(new ChronicDiseaseComboBoxConverter()).bind("chronicDiseaseId");
-//        binder.forField(petId).withConverter(new StringToLongConverter("must be long")).bind("petId");
-//        binder.forField(chronicDiseaseId).withConverter(new StringToLongConverter("must be long")).bind("chronicDiseaseId");
-
         binder.bindInstanceFields(this);
-        binder.setBean(new ChronicDisease_Pet(chronicDisease_petView.getPetId()));
-//        System.out.println(chronicDisease_petView.getPetId());
-//        System.out.println(chronicDiseaseId.getValue().getId());
-//        System.out.println(dateOfDiagnosis.getValue());
-//        ChronicDisease_Pet chronicDisease_Pet_Pet = new ChronicDisease_Pet(5L, 11L, dateOfDiagnosis.getValue());
-//        binder.setBean(chronicDisease_Pet_Pet);
+        binder.setBean(new ChronicDisease_Pet());
+
         add(chronicDiseaseId,
                 dateOfDiagnosis,
                 createButtonsLayout());
@@ -77,6 +69,7 @@ public class ChronicDisease_PetForm extends FormLayout {
     private void save() {
 
         chronicDisease_pet = binder.getBean();
+        chronicDisease_pet.setPetId(chronicDisease_petView.getPetId());
         vetSystemClient.addChronicDisease(chronicDisease_pet);
         chronicDisease_petView.filter();
         setChronicDisease_Pet(null);
@@ -84,6 +77,7 @@ public class ChronicDisease_PetForm extends FormLayout {
 
     private void delete() {
         chronicDisease_pet = binder.getBean();
+        chronicDisease_pet.setPetId(chronicDisease_petView.getPetId());
         vetSystemClient.deletePetChronicDisease(chronicDisease_pet);
         chronicDisease_petView.filter();
     }

@@ -1,26 +1,22 @@
-package com.kodilla.frontend.ui.Forms;
+package com.kodilla.frontend.ui.Form;
 
 import com.kodilla.frontend.client.VetSystemClient;
-import com.kodilla.frontend.domain.Vaccination;
-import com.kodilla.frontend.domain.Unit;
-import com.kodilla.frontend.ui.VaccinationView;
+import com.kodilla.frontend.domain.ChronicDisease;
+import com.kodilla.frontend.ui.ChronicDiseaseView;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
-public class VaccinationForm extends FormLayout {
+public class ChronicDiseaseForm extends FormLayout {
 
-    private final VaccinationView vaccinationView;
+    private final ChronicDiseaseView chronicDiseaseView;
     private VetSystemClient vetSystemClient = new VetSystemClient();
 
-    private TextField vaccinationName = new TextField("Vaccination");
-    private TextField dosePerKg = new TextField("Dose per Kg");
-    private ComboBox<Unit> unit = new ComboBox<>("Unit");
+    private TextField name = new TextField("name");
 
 
     Button save = new Button("Save");
@@ -28,25 +24,23 @@ public class VaccinationForm extends FormLayout {
     Button delete = new Button("Delete");
     Button close = new Button("Cancel");
 
-    Binder<Vaccination> binder =
-            new Binder<>(Vaccination.class);
+    Binder<ChronicDisease> binder =
+            new Binder<>(ChronicDisease.class);
 
-    private Vaccination vaccination = binder.getBean();
+    private ChronicDisease chronicDisease = binder.getBean();
 
-    public VaccinationForm(VaccinationView vaccinationView) {
-        this.vaccinationView = vaccinationView;
-        unit.setItems(Unit.values());
+    public ChronicDiseaseForm(ChronicDiseaseView chronicDiseaseView) {
+        this.chronicDiseaseView = chronicDiseaseView;
         binder.bindInstanceFields(this);
-        binder.setBean(new Vaccination());
+        binder.setBean(new ChronicDisease());
 
-        add(vaccinationName,
-                dosePerKg,
-                unit,
+        add(name,
                 createButtonsLayout());
         save.addClickListener(event -> save());
         update.addClickListener(event -> update());
         delete.addClickListener(event -> delete());
         close.addClickListener(event -> close());
+
     }
 
     private HorizontalLayout createButtonsLayout() {
@@ -61,42 +55,40 @@ public class VaccinationForm extends FormLayout {
     }
 
     private void update() {
-        vaccination = binder.getBean();
-        vetSystemClient.updateVaccination(vaccination);
-        vaccinationView.refresh();
-        setClient(null);
+        chronicDisease = binder.getBean();
+        vetSystemClient.updateChronicDisease(chronicDisease);
+        chronicDiseaseView.refresh();
+        setChronicDisease(null);
     }
 
     private void save() {
 
-        vaccination = binder.getBean();
-        vetSystemClient.createVaccination(vaccination);
-        vaccinationView.refresh();
-        setClient(null);
+        chronicDisease = binder.getBean();
+        vetSystemClient.createChronicDisease(chronicDisease);
+        chronicDiseaseView.refresh();
+        setChronicDisease(null);
     }
 
     private void delete() {
-        vaccination = binder.getBean();
-        vetSystemClient.deleteVaccination(vaccination);
-        vaccinationView.refresh();
+        chronicDisease = binder.getBean();
+        vetSystemClient.deleteChronicDisease(chronicDisease);
+        chronicDiseaseView.refresh();
     }
 
     private void close() {
-        setClient(null);
+        setChronicDisease(null);
     }
 
+    public void setChronicDisease(ChronicDisease chronicDisease) {
 
-    public void setClient(Vaccination vaccination) {
+        binder.setBean(chronicDisease);
 
-        binder.setBean(vaccination);
-
-        if (vaccination == null) {
+        if (chronicDisease == null) {
             setVisible(false);
         } else {
             setVisible(true);
         }
     }
-
 
     public void hideSaveButton() {
         save.setVisible(false);
@@ -111,3 +103,4 @@ public class VaccinationForm extends FormLayout {
     }
 
 }
+
