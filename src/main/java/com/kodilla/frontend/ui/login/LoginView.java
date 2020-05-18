@@ -1,23 +1,12 @@
 package com.kodilla.frontend.ui.login;
-import com.kodilla.frontend.domain.Client;
+
 import com.kodilla.frontend.security.SecurityUtils;
-import com.kodilla.frontend.ui.EntityView.ClientView;
 import com.kodilla.frontend.ui.MainView;
-import com.sun.javaws.Main;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.page.Viewport;
-import com.vaadin.flow.router.AfterNavigationEvent;
-import com.vaadin.flow.router.AfterNavigationObserver;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 
-@Route(value = "login",layout = MainView.class)
+@Route(value = "login", layout = MainView.class)
 @PageTitle("VetSystem")
 public class LoginView extends LoginOverlay
         implements AfterNavigationObserver, BeforeEnterObserver {
