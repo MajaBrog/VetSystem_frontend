@@ -6,7 +6,7 @@ import com.kodilla.frontend.domain.Vaccination;
 import com.kodilla.frontend.domain.Unit;
 import com.kodilla.frontend.domain.Visit_Vaccination;
 import com.kodilla.frontend.ui.Converter.VaccinationComboBoxConverter;
-import com.kodilla.frontend.ui.VisitView;
+import com.kodilla.frontend.ui.EntityView.VisitView;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -36,7 +36,7 @@ public class Visit_VaccinationForm extends FormLayout {
             new Binder<>(Visit_Vaccination.class);
 
     private Visit_Vaccination visit_vaccination = binder.getBean();
-
+    private Long visitId;
 
     public Visit_VaccinationForm(VisitView visitView) {
         this.visitView = visitView;
@@ -72,15 +72,18 @@ public class Visit_VaccinationForm extends FormLayout {
     private void save() {
 
         visit_vaccination = binder.getBean();
+        visit_vaccination.setVisitId(visitId);
         vetSystemClient.createVisit_Vaccination(visit_vaccination);
-//        visitView.filter();
+        visitView.refresh();
         setVisit_Vaccination(null);
     }
 
     private void delete() {
         visit_vaccination = binder.getBean();
+        visit_vaccination.setVisitId(visitId);
         vetSystemClient.deleteVisit_Vaccination(visit_vaccination);
-//        visitView.filter();
+        visitView.refresh();
+        setVisit_Vaccination(null);
     }
 
     private void close() {
@@ -94,6 +97,8 @@ public class Visit_VaccinationForm extends FormLayout {
         if (visit_vaccination == null) {
             setVisible(false);
         } else {
+            visitId = visit_vaccination.getVisitId();
+            System.out.println(visitId);
             setVisible(true);
         }
     }

@@ -6,7 +6,7 @@ import com.kodilla.frontend.domain.Medication;
 import com.kodilla.frontend.domain.Unit;
 import com.kodilla.frontend.domain.Visit_Medication;
 import com.kodilla.frontend.ui.Converter.MedicationComboBoxConverter;
-import com.kodilla.frontend.ui.VisitView;
+import com.kodilla.frontend.ui.EntityView.VisitView;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -22,7 +22,6 @@ public class Visit_MedicationForm extends FormLayout {
 
     private final VisitView visitView;
     private VetSystemClient vetSystemClient = new VetSystemClient();
-
     List<Medication> medications = vetSystemClient.getMedications();
     private ComboBox<Medication> medicationId = new ComboBox<>("Medication");
     private TextField dose = new TextField("Dose");
@@ -37,6 +36,7 @@ public class Visit_MedicationForm extends FormLayout {
 
     private Visit_Medication visit_medication = binder.getBean();
 
+    private Long visitId;
 
     public Visit_MedicationForm(VisitView visitView) {
         this.visitView = visitView;
@@ -70,17 +70,19 @@ public class Visit_MedicationForm extends FormLayout {
 
 
     private void save() {
-
         visit_medication = binder.getBean();
+        visit_medication.setVisitId(visitId);
         vetSystemClient.createVisit_Medication(visit_medication);
-//        visitView.filter();
+        visitView.refresh();
         setVisit_Medication(null);
     }
 
     private void delete() {
         visit_medication = binder.getBean();
+        visit_medication.setVisitId(visitId);
         vetSystemClient.deleteVisit_Medication(visit_medication);
-//        visitView.filter();
+        visitView.refresh();
+        setVisit_Medication(null);
     }
 
     private void close() {
@@ -90,10 +92,10 @@ public class Visit_MedicationForm extends FormLayout {
     public void setVisit_Medication(Visit_Medication visit_medication) {
 
         binder.setBean(visit_medication);
-
         if (visit_medication == null) {
             setVisible(false);
         } else {
+        visitId=visit_medication.getVisitId();
             setVisible(true);
         }
     }

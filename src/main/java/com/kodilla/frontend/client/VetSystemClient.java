@@ -1,22 +1,33 @@
 package com.kodilla.frontend.client;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kodilla.frontend.domain.*;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class VetSystemClient {
-    RestTemplate restTemplate = new RestTemplate();
+    ClientHttpRequestFactory requestFactory = new
+            HttpComponentsClientHttpRequestFactory(HttpClients.createDefault());
+    RestTemplate restTemplate = new RestTemplate(requestFactory);
     private String backendURL = "http://localhost:8089//v1/";
+    Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+            .create();
 
     public List<Medication> getMedications() {
 
@@ -54,10 +65,7 @@ public class VetSystemClient {
     public void updateMedication(Medication medication) {
         String url = backendURL + "medication";
 
-        String json = "{\"medicationName\":\"" + medication.getMedicationName() + "\"," +
-                "\"dosePerKg\":\"" + medication.getDosePerKg() + "\"," +
-                "\"unit\":\"" + medication.getUnit() + "\"}";
-
+        String json = gson.toJson(medication);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(json, headers);
@@ -68,10 +76,7 @@ public class VetSystemClient {
     public void createMedication(Medication medication) {
         String url = backendURL + "medication";
 
-        String json = "{\"medicationName\":\"" + medication.getMedicationName() + "\"," +
-                "\"dosePerKg\":\"" + medication.getDosePerKg() + "\"," +
-                "\"unit\":\"" + medication.getUnit() + "\"}";
-
+        String json = gson.toJson(medication);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(json, headers);
@@ -121,15 +126,7 @@ public class VetSystemClient {
     public void updateVaccination(Vaccination vaccination) {
         String url = backendURL + "vaccination";
 
-        String json = "{\"vaccinationName\":\"" + vaccination.getName() + "\"," +
-                "\"dosePerKg\":\"" + vaccination.getDosePerKg() + "\"," +
-                "\"unit\":\"" + vaccination.getUnit() + "\"}";
-
-//        ObjectMapper mapper = new ObjectMapper();
-
-//        String jsonString = mapper.writeValueAsString(vaccination);
-//
-//        System.out.println(jsonString);
+        String json = gson.toJson(vaccination);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -141,9 +138,7 @@ public class VetSystemClient {
     public void createVaccination(Vaccination vaccination) {
         String url = backendURL + "vaccination";
 
-        String json = "{\"vaccinationName\":\"" + vaccination.getName() + "\"," +
-                "\"dosePerKg\":\"" + vaccination.getDosePerKg() + "\"," +
-                "\"unit\":\"" + vaccination.getUnit() + "\"}";
+        String json = gson.toJson(vaccination);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -154,7 +149,6 @@ public class VetSystemClient {
     public void deleteVaccination(Vaccination vaccination) {
         restTemplate.delete(backendURL + "vaccination/" + vaccination.getId());
     }
-
 
     public List<Client> getClients() {
 
@@ -194,38 +188,19 @@ public class VetSystemClient {
     public void updateClient(Client client) {
         String url = backendURL + "client";
 
-        String json = "{\"legalID\":\"" + client.getLegalID() + "\"," +
-                "\"firstName\":\"" + client.getFirstName() + "\"," +
-                "\"lastName\":\"" + client.getLastName() + "\"," +
-                "\"phoneNumber\":\"" + client.getPhoneNumber() + "\"," +
-                "\"address\":{\"street\":\"" + client.getAddress().getStreet() + "\"," +
-                "\"houseNumber\":" + client.getAddress().getHouseNumber() + "," +
-                "\"homeNumber\":" + client.getAddress().getHomeNumber() + "," +
-                "\"city\":\"" + client.getAddress().getCity() + "\"," +
-                "\"postcode\":\"" + client.getAddress().getPostcode() + "\"}," +
-                "\"email\":\"" + client.getEmail() + "\"}";
+        String json = gson.toJson(client);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(json, headers);
-        restTemplate.exchange(url, HttpMethod.PUT, request, Void.class);
+        restTemplate.put(url,request);
 
     }
 
     public void createClient(Client client) {
         String url = backendURL + "client";
 
-        String json = "{\"legalID\":\"" + client.getLegalID() + "\"," +
-                "\"firstName\":\"" + client.getFirstName() + "\"," +
-                "\"lastName\":\"" + client.getLastName() + "\"," +
-                "\"phoneNumber\":\"" + client.getPhoneNumber() + "\"," +
-                "\"address\":{\"street\":\"" + client.getAddress().getStreet() + "\"," +
-                "\"houseNumber\":" + client.getAddress().getHouseNumber() + "," +
-                "\"homeNumber\":" + client.getAddress().getHomeNumber() + "," +
-                "\"city\":\"" + client.getAddress().getCity() + "\"," +
-                "\"postcode\":\"" + client.getAddress().getPostcode() + "\"}," +
-                "\"email\":\"" + client.getEmail() + "\"}";
-
+        String json = gson.toJson(client);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(json, headers);
@@ -233,7 +208,8 @@ public class VetSystemClient {
     }
 
     public void deleteClient(Client client) {
-        restTemplate.delete(backendURL + "client" + client.getId());
+
+        restTemplate.delete(backendURL + "client/" + client.getId());
     }
 
     public List<Pet> getPets() {
@@ -274,14 +250,7 @@ public class VetSystemClient {
     public void updatePet(Pet pet) {
         String url = backendURL + "pet";
 
-        String json = "{\"chipId\":\"" + pet.getChipId() + "\"," +
-                "\"name\":\"" + pet.getName() + "\"," +
-                "\"kind\":\"" + pet.getKind() + "\"," +
-                "\"birthDate\":\"" + pet.getBirthDate() + "\"," +
-                "\"sterilised\":" + pet.isSterilised() + "," +
-                "\"dateOfSterilization\":\"" + pet.getDateOfSterilization() + "\"," +
-                "\"aggressive\":" + pet.isAggressive() + "," +
-                "\"clientId\":\"" + pet.getClientId() + "\"}";
+        String json = gson.toJson(pet);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -293,15 +262,7 @@ public class VetSystemClient {
     public void createPet(Pet pet) {
         String url = backendURL + "pet";
 
-        String json = "{\"chipId\":\"" + pet.getChipId() + "\"," +
-                "\"name\":\"" + pet.getName() + "\"," +
-                "\"kind\":\"" + pet.getKind() + "\"," +
-                "\"birthDate\":\"" + pet.getBirthDate() + "\"," +
-                "\"sterilised\":" + pet.isSterilised() + "," +
-                "\"dateOfSterilization\":\"" + pet.getDateOfSterilization() + "\"," +
-                "\"aggressive\":" + pet.isAggressive() + "," +
-                "\"clientId\":\"" + pet.getClientId() + "\"}";
-
+        String json = gson.toJson(pet);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(json, headers);
@@ -350,11 +311,7 @@ public class VetSystemClient {
     public void updateVisit(Visit visit) {
         String url = backendURL + "visit";
 
-        String json = "{\"petId\":\"" + visit.getPetId() + "\"," +
-                "\"diagnose\":\"" + visit.getDiagnose() + "\"," +
-                "\"AdditionalRecommendation\":\"" + visit.getAdditionalRecommendation() + "\"," +
-                "\"weight\":" + visit.getWeight() + "}";
-
+        String json = gson.toJson(visit);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -363,18 +320,15 @@ public class VetSystemClient {
 
     }
 
-    public void createVisit(Visit visit) {
+    public Visit createVisit(Visit visit) {
         String url = backendURL + "visit";
 
-        String json = "{\"petId\":\"" + visit.getPetId() + "\"," +
-                "\"diagnose\":\"" + visit.getDiagnose() + "\"," +
-                "\"AdditionalRecommendation\":\"" + visit.getAdditionalRecommendation() + "\"," +
-                "\"weight\":" + visit.getWeight() + "}";
+        String json = gson.toJson(visit);
         System.out.println(json);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(json, headers);
-        restTemplate.postForObject(url, request, Visit.class);
+        return restTemplate.postForObject(url, request, Visit.class);
     }
 
     public void deleteVisit(Visit visit) {
@@ -428,8 +382,7 @@ public class VetSystemClient {
     public void updateChronicDisease(ChronicDisease chronicDisease) {
         String url = backendURL + "chronicDisease";
 
-        String json = "{\"name\":\"" + chronicDisease.getName() + "\"}";
-
+        String json = gson.toJson(chronicDisease);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(json, headers);
@@ -440,8 +393,8 @@ public class VetSystemClient {
     public void createChronicDisease(ChronicDisease chronicDisease) {
         String url = backendURL + "chronicDisease";
 
-        String json = "{\"name\":\"" + chronicDisease.getName() + "\"}";
-
+//        String json = "{\"name\":\"" + chronicDisease.getName() + "\"}";
+        String json = gson.toJson(chronicDisease);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(json, headers);
@@ -459,10 +412,7 @@ public class VetSystemClient {
     public void addChronicDisease(ChronicDisease_Pet chronicDisease_pet) {
         String url = backendURL + "chronicDisease/pet";
 
-        String json = "{\"petId\":\"" + chronicDisease_pet.getPetId() + "\"," +
-                "\"chronicDiseaseId\":\"" + chronicDisease_pet.getChronicDiseaseId() + "\"," +
-                "\"dateOfDiagnosis\":\"" + chronicDisease_pet.getDateOfDiagnosis() + "\"}";
-
+        String json = gson.toJson(chronicDisease_pet);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(json, headers);
@@ -471,14 +421,14 @@ public class VetSystemClient {
 
     public Visit_Medication getVisit_Medication(Long id) {
 
-        String url = backendURL + "visit_medication/" + id;
+        String url = backendURL + "visit_Medication/" + id;
 
         return restTemplate.getForObject(url, Visit_Medication.class);
     }
 
     public List<Visit_Medication> getVisit_Medications() {
 
-        String url = backendURL + "visit_medication";
+        String url = backendURL + "visit_Medication";
 
         try {
             Visit_Medication[] Response = restTemplate.getForObject(url, Visit_Medication[].class);
@@ -490,7 +440,7 @@ public class VetSystemClient {
 
     public List<Visit_Medication> getVisitMedications(Long visitId) {
 
-        String url = backendURL + "visit_medication/visit/"+ visitId;
+        String url = backendURL + "visit_Medication/visit/"+ visitId;
 
         try {
             Visit_Medication[] Response = restTemplate.getForObject(url, Visit_Medication[].class);
@@ -501,29 +451,12 @@ public class VetSystemClient {
     }
 
 
-    public void updateVisit_Medication(Visit_Medication visit_medication) {
-        String url = backendURL + "visit_medication";
 
-        String json = "{\"visitId\":\"" + visit_medication.getVisitId() + "\"," +
-                "\"medicationId\":\"" + visit_medication.getMedicationId() + "\"," +
-                "\"dose\":\"" + visit_medication.getDose() + "\"," +
-                "\"unit\":\"" + visit_medication.getUnit() + "\"}";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> request = new HttpEntity<String>(json, headers);
-        restTemplate.exchange(url, HttpMethod.PUT, request, Void.class);
-
-    }
 
     public void createVisit_Medication(Visit_Medication visit_medication) {
-        String url = backendURL + "visit_medication";
+        String url = backendURL + "visit_Medication";
 
-        String json = "{\"visitId\":\"" + visit_medication.getVisitId() + "\"," +
-                "\"medicationId\":\"" + visit_medication.getMedicationId() + "\"," +
-                "\"dose\":\"" + visit_medication.getDose() + "\"," +
-                "\"unit\":\"" + visit_medication.getUnit() + "\"}";
-
+        String json = gson.toJson(visit_medication);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(json, headers);
@@ -531,17 +464,13 @@ public class VetSystemClient {
     }
 
     public void deleteVisit_Medication(Visit_Medication visit_medication) {
-        restTemplate.delete(backendURL + "visit_medication/" + visit_medication.getId());
+        restTemplate.delete(backendURL + "visit_Medication/" + visit_medication.getId());
     }
 
     public void createVisit_Vaccination(Visit_Vaccination visit_vaccination) {
-        String url = backendURL + "visit_vaccination";
+        String url = backendURL + "visit_Vaccination";
 
-        String json = "{\"visitId\":\"" + visit_vaccination.getVisitId() + "\"," +
-                "\"vaccinationId\":\"" + visit_vaccination.getVaccinationId() + "\"," +
-                "\"dose\":\"" + visit_vaccination.getDose() + "\"," +
-                "\"unit\":\"" + visit_vaccination.getUnit() + "\"}";
-
+        String json = gson.toJson(visit_vaccination);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(json, headers);
@@ -549,7 +478,7 @@ public class VetSystemClient {
     }
 
     public void deleteVisit_Vaccination(Visit_Vaccination visit_vaccination) {
-        restTemplate.delete(backendURL + "visit_vaccination/" + visit_vaccination.getId());
+        restTemplate.delete(backendURL + "visit_Vaccination/" + visit_vaccination.getId());
     }
 
 

@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Vaccination {
-    private Long Id;
+    private Long id;
     private String name;
     private String disease;
     private String dosePerKg;

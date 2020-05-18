@@ -27,9 +27,11 @@ ext {
 dependencies {
     compile group: 'org.vaadin.crudui', name: 'crudui', version: '4.2.0'
     compile group: 'com.vaadin', name: 'vaadin-crud-flow', version: '1.1.1'
+    compile('com.google.code.gson:gson:2.8.2')
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
 
-//    compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.3.1.RELEASE'
-//    compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.3.1.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.3.1.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.3.1.RELEASE'
 
     implementation 'com.vaadin:vaadin-spring-boot-starter'
     compileOnly 'org.projectlombok:lombok'

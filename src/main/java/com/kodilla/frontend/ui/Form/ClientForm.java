@@ -3,7 +3,7 @@ package com.kodilla.frontend.ui.Form;
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.Address;
 import com.kodilla.frontend.domain.Client;
-import com.kodilla.frontend.ui.ClientView;
+import com.kodilla.frontend.ui.EntityView.ClientView;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -102,6 +102,7 @@ public class ClientForm extends FormLayout {
         client = binder.getBean();
         vetSystemClient.deleteClient(client);
         clientView.refresh();
+        setClient(null);
     }
 
     private void close() {

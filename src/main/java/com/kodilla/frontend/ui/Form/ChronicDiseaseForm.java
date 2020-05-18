@@ -2,7 +2,7 @@ package com.kodilla.frontend.ui.Form;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.ChronicDisease;
-import com.kodilla.frontend.ui.ChronicDiseaseView;
+import com.kodilla.frontend.ui.EntityView.ChronicDiseaseView;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -73,6 +73,7 @@ public class ChronicDiseaseForm extends FormLayout {
         chronicDisease = binder.getBean();
         vetSystemClient.deleteChronicDisease(chronicDisease);
         chronicDiseaseView.refresh();
+        setChronicDisease(null);
     }
 
     private void close() {

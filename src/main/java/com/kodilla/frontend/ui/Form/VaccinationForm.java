@@ -3,10 +3,11 @@ package com.kodilla.frontend.ui.Form;
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.Vaccination;
 import com.kodilla.frontend.domain.Unit;
-import com.kodilla.frontend.ui.VaccinationView;
+import com.kodilla.frontend.ui.EntityView.VaccinationView;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -19,8 +20,10 @@ public class VaccinationForm extends FormLayout {
     private VetSystemClient vetSystemClient = new VetSystemClient();
 
     private TextField name = new TextField("Vaccination");
+    private TextField disease = new TextField("Disease");
     private TextField dosePerKg = new TextField("Dose per Kg");
     private ComboBox<Unit> unit = new ComboBox<>("Unit");
+    private Checkbox mandatory = new Checkbox("Mandatory",false);
 
 
     Button save = new Button("Save");
@@ -40,8 +43,10 @@ public class VaccinationForm extends FormLayout {
         binder.setBean(new Vaccination());
 
         add(name,
+                disease,
                 dosePerKg,
                 unit,
+                mandatory,
                 createButtonsLayout());
         save.addClickListener(event -> save());
         update.addClickListener(event -> update());
@@ -79,6 +84,7 @@ public class VaccinationForm extends FormLayout {
         vaccination = binder.getBean();
         vetSystemClient.deleteVaccination(vaccination);
         vaccinationView.refresh();
+        setVaccination(null);
     }
 
     private void close() {
@@ -96,7 +102,6 @@ public class VaccinationForm extends FormLayout {
             setVisible(true);
         }
     }
-
 
     public void hideSaveButton() {
         save.setVisible(false);

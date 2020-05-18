@@ -2,7 +2,7 @@ package com.kodilla.frontend.ui.Form;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.Pet;
-import com.kodilla.frontend.ui.PetView;
+import com.kodilla.frontend.ui.EntityView.PetView;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -73,6 +73,7 @@ public class PetForm extends FormLayout {
 
     private void update() {
         pet = binder.getBean();
+        pet.setClientId(petView.getClientId());
         vetSystemClient.updatePet(pet);
         petView.refresh();
         setPet(null);
@@ -81,6 +82,7 @@ public class PetForm extends FormLayout {
     private void save() {
 
         pet = binder.getBean();
+        pet.setClientId(petView.getClientId());
         vetSystemClient.createPet(pet);
         petView.refresh();
         setPet(null);
@@ -88,8 +90,10 @@ public class PetForm extends FormLayout {
 
     private void delete() {
         pet = binder.getBean();
+        pet.setClientId(petView.getClientId());
         vetSystemClient.deletePet(pet);
         petView.refresh();
+        setPet(null);
     }
 
     private void close() {

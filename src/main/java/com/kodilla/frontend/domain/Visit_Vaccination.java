@@ -24,4 +24,8 @@ public class Visit_Vaccination {
         this.unit = unit;
         this.remindDate = remindDate;
     }
+
+    public Visit_Vaccination(Long visitId) {
+        this.visitId = visitId;
+    }
 }

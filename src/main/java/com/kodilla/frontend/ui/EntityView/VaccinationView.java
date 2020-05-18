@@ -1,10 +1,12 @@
-package com.kodilla.frontend.ui;
+package com.kodilla.frontend.ui.EntityView;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.Vaccination;
 import com.kodilla.frontend.ui.Form.VaccinationForm;
+import com.kodilla.frontend.ui.MainView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -20,6 +22,7 @@ public class VaccinationView extends VerticalLayout {
 
 
     public VaccinationView() {
+        filterText.setPrefixComponent(VaadinIcon.SEARCH.create());
         filterText.setPlaceholder("Filter by name...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.EAGER);
@@ -32,7 +35,7 @@ public class VaccinationView extends VerticalLayout {
         });
         configureGrid();
 
-        Button addNewClientBtn = new Button("Add new vaccination");
+        Button addNewClientBtn = new Button("Add new vaccination", VaadinIcon.PLUS_CIRCLE.create());
         addNewClientBtn.addClickListener(e -> {
             grid.asSingleSelect().clear();
             vaccinationForm.setVaccination(new Vaccination());
@@ -70,7 +73,7 @@ public class VaccinationView extends VerticalLayout {
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
         grid.addComponentColumn(vaccination -> {
-            Button edit = new Button("Edit");
+            Button edit = new Button("Edit",VaadinIcon.EDIT.create());
             edit.addClickListener(event -> {
                         vaccinationForm.setVaccination(vaccination);
                         vaccinationForm.hideSaveButton();

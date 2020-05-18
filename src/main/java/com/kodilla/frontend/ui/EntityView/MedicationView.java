@@ -1,10 +1,12 @@
-package com.kodilla.frontend.ui;
+package com.kodilla.frontend.ui.EntityView;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.Medication;
 import com.kodilla.frontend.ui.Form.MedicationForm;
+import com.kodilla.frontend.ui.MainView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -97,6 +99,7 @@ public class MedicationView extends VerticalLayout {
 
 
     public MedicationView() {
+        filterText.setPrefixComponent(VaadinIcon.SEARCH.create());
         filterText.setPlaceholder("Filter by name...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.EAGER);
@@ -108,7 +111,7 @@ public class MedicationView extends VerticalLayout {
             }
         });        configureGrid();
 
-        Button addNewClientBtn = new Button("Add new medication");
+        Button addNewClientBtn = new Button("Add new medication", VaadinIcon.PLUS_CIRCLE.create());
         addNewClientBtn.addClickListener(e -> {
             grid.asSingleSelect().clear();
             medicationForm.setMedication(new Medication());
@@ -135,7 +138,7 @@ public class MedicationView extends VerticalLayout {
         );
 
        grid.addComponentColumn(medication -> {
-            Button edit = new Button("Edit");
+            Button edit = new Button("Edit",VaadinIcon.EDIT.create());
             edit.addClickListener(event -> {
                 System.out.println(medication);
                         medicationForm.setMedication(medication);

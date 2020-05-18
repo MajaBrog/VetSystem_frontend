@@ -1,7 +1,9 @@
 package com.kodilla.frontend.ui;
 
+import com.kodilla.frontend.ui.EntityView.*;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Span;
@@ -11,26 +13,29 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabVariant;
 import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.VaadinServlet;
 
-import java.util.Optional;
 
-
-@Route("")
-@PageTitle("Contacts | Vaadin CRM")
-//@CssImport("./styles/shared-styles.css")
-public class MainView extends AppLayout {
+@Route(value = "")
+@PWA(name = "VetSystem", shortName = "VetSystem",
+        startPath = "login",
+        enableInstallPrompt = false)public class MainView extends AppLayout  {
     private final Tabs menu;
 
     public MainView() {
         this.setDrawerOpened(false);
         Span appName = new Span("VetSystem");
+        appName.getElement().getStyle().set("font-weight","bold");
+        appName.getElement().getStyle().set("font-size","30px");
+        appName.getElement().getStyle().set("text-indent","10px");
 
         menu = createMenuTabs();
+
         FlexLayout centeredLayout = new FlexLayout();
         centeredLayout.setSizeFull();
         centeredLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -44,8 +49,8 @@ public class MainView extends AppLayout {
     private static Tabs createMenuTabs() {
         final Tabs tabs = new Tabs();
         tabs.setOrientation(Tabs.Orientation.HORIZONTAL);
-
-        tabs.add(createTab(VaadinIcon.USER, "Clients", ClientView.class));
+        Tab clientTab=createTab(VaadinIcon.USER, "Clients", ClientView.class);
+        tabs.add(clientTab);
         tabs.add(createTab(VaadinIcon.ARCHIVES, "Visits", VisitView.class));
         tabs.add(createTab(VaadinIcon.PILLS, "Medication", MedicationView.class));
         tabs.add(createTab(VaadinIcon.PILL, "Vaccination", VaccinationView.class));
@@ -53,6 +58,7 @@ public class MainView extends AppLayout {
         final String contextPath = VaadinServlet.getCurrent().getServletContext().getContextPath();
         final Tab logoutTab = createTab(createLogoutLink(contextPath));
         tabs.add(logoutTab);
+        clientTab.setSelected(true);
         return tabs;
     }
 

@@ -1,10 +1,12 @@
-package com.kodilla.frontend.ui;
+package com.kodilla.frontend.ui.EntityView;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.ChronicDisease;
 import com.kodilla.frontend.ui.Form.ChronicDiseaseForm;
+import com.kodilla.frontend.ui.MainView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -21,6 +23,7 @@ public class ChronicDiseaseView extends VerticalLayout {
     ChronicDiseaseForm chronicDiseaseForm = new ChronicDiseaseForm(this);
 
     public ChronicDiseaseView() {
+        filterText.setPrefixComponent(VaadinIcon.SEARCH.create());
         filterText.setPlaceholder("Filter by name...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.EAGER);
@@ -33,7 +36,7 @@ public class ChronicDiseaseView extends VerticalLayout {
         });
         configureGrid();
 
-        Button addNewChronicDiseaseBtn = new Button("Add new chronicDisease");
+        Button addNewChronicDiseaseBtn = new Button("Add new chronicDisease", VaadinIcon.PLUS_CIRCLE.create());
         addNewChronicDiseaseBtn.addClickListener(e -> {
             grid.asSingleSelect().clear();
             chronicDiseaseForm.setChronicDisease(new ChronicDisease());
@@ -53,9 +56,7 @@ public class ChronicDiseaseView extends VerticalLayout {
         refresh();
 
         chronicDiseaseForm.setChronicDisease(null);
-
     }
-
 
     private void configureGrid() {
         grid.setSizeFull();
@@ -63,7 +64,7 @@ public class ChronicDiseaseView extends VerticalLayout {
         grid.addColumn(ChronicDisease::getName).setHeader("Chronic Disease");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.addComponentColumn(chronicDisease -> {
-            Button edit = new Button("Edit");
+            Button edit = new Button("Edit",VaadinIcon.EDIT.create());
             edit.addClickListener(event -> {
                         chronicDiseaseForm.setChronicDisease(chronicDisease);
                         chronicDiseaseForm.hideSaveButton();

@@ -3,7 +3,7 @@ package com.kodilla.frontend.ui.Form;
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.ChronicDisease;
 import com.kodilla.frontend.domain.ChronicDisease_Pet;
-import com.kodilla.frontend.ui.ChronicDisease_PetView;
+import com.kodilla.frontend.ui.EntityView.ChronicDisease_PetView;
 import com.kodilla.frontend.ui.Converter.ChronicDiseaseComboBoxConverter;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
@@ -80,6 +80,8 @@ public class ChronicDisease_PetForm extends FormLayout {
         chronicDisease_pet.setPetId(chronicDisease_petView.getPetId());
         vetSystemClient.deletePetChronicDisease(chronicDisease_pet);
         chronicDisease_petView.filter();
+        setChronicDisease_Pet(null);
+
     }
 
     private void close() {

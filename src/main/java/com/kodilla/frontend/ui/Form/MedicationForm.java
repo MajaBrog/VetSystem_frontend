@@ -3,7 +3,7 @@ package com.kodilla.frontend.ui.Form;
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.Medication;
 import com.kodilla.frontend.domain.Unit;
-import com.kodilla.frontend.ui.MedicationView;
+import com.kodilla.frontend.ui.EntityView.MedicationView;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -69,7 +69,6 @@ public class MedicationForm extends FormLayout {
     }
 
     private void save() {
-
         medication = binder.getBean();
         vetSystemClient.createMedication(medication);
         medicationView.refresh();
@@ -80,6 +79,7 @@ public class MedicationForm extends FormLayout {
         medication = binder.getBean();
         vetSystemClient.deleteMedication(medication);
         medicationView.refresh();
+        setMedication(null);
     }
 
     private void close() {

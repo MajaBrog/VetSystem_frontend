@@ -1,11 +1,13 @@
-package com.kodilla.frontend.ui;
+package com.kodilla.frontend.ui.EntityView;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.Address;
 import com.kodilla.frontend.domain.Client;
 import com.kodilla.frontend.ui.Form.ClientForm;
+import com.kodilla.frontend.ui.MainView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -23,7 +25,8 @@ public class ClientView extends VerticalLayout {
     ClientForm clientForm = new ClientForm(this);
 
     public ClientView() {
-        filterText.setPlaceholder("Filter by name...");
+        filterText.setPrefixComponent(VaadinIcon.SEARCH.create());
+        filterText.setPlaceholder("Filter by last name...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.EAGER);
         filterText.addValueChangeListener(e -> {
@@ -36,7 +39,7 @@ public class ClientView extends VerticalLayout {
 
         configureGrid();
 
-        Button addNewClientBtn = new Button("Add new client");
+        Button addNewClientBtn = new Button("Add new client", VaadinIcon.PLUS_CIRCLE.create());
         addNewClientBtn.addClickListener(e -> {
             grid.asSingleSelect().clear();
             clientForm.setClient(new Client(new Address()));
@@ -75,7 +78,7 @@ public class ClientView extends VerticalLayout {
         }).setHeader("Address");
 
         grid.addComponentColumn(client -> {
-            Button edit = new Button("Edit");
+            Button edit =new Button("Edit",VaadinIcon.EDIT.create());
             edit.addClickListener(event -> {
                         clientForm.setClient(client);
                         clientForm.hideSaveButton();

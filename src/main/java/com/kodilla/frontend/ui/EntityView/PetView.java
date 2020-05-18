@@ -1,17 +1,17 @@
-package com.kodilla.frontend.ui;
+package com.kodilla.frontend.ui.EntityView;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.Pet;
 import com.kodilla.frontend.ui.Form.PetForm;
+import com.kodilla.frontend.ui.MainView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.*;
-
-import java.util.stream.Collectors;
 
 @Route(value = "pet", layout = MainView.class)
 public class PetView extends VerticalLayout implements AfterNavigationObserver, HasUrlParameter<Long> {
@@ -41,12 +41,13 @@ public class PetView extends VerticalLayout implements AfterNavigationObserver, 
     PetForm petForm = new PetForm(this);
 
     public PetView() {
+        filterText.setPrefixComponent(VaadinIcon.SEARCH.create());
         filterText.setPlaceholder("Filter by name...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.EAGER);
         configureGrid();
 
-        Button addNewPetBtn = new Button("Add new pet");
+        Button addNewPetBtn = new Button("Add new pet", VaadinIcon.PLUS_CIRCLE.create());
         addNewPetBtn.addClickListener(e -> {
             grid.asSingleSelect().clear();
             petForm.setPet(new Pet());
@@ -66,7 +67,7 @@ public class PetView extends VerticalLayout implements AfterNavigationObserver, 
         petForm.setPet(null);
 
         grid.addComponentColumn(pet -> {
-            Button edit = new Button("Edit");
+            Button edit = new Button("Edit",VaadinIcon.EDIT.create());
             edit.addClickListener(event -> {
                         petForm.setPet(pet);
                         petForm.hideSaveButton();
@@ -114,6 +115,9 @@ public class PetView extends VerticalLayout implements AfterNavigationObserver, 
     public void refresh() {
 
         grid.setItems(vetSystemClient.getClientPets(clientId));
+    }
+    public Long getClientId(){
+        return clientId;
     }
 
 

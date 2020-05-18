@@ -1,10 +1,12 @@
-package com.kodilla.frontend.ui;
+package com.kodilla.frontend.ui.EntityView;
 
 import com.kodilla.frontend.client.VetSystemClient;
 import com.kodilla.frontend.domain.ChronicDisease_Pet;
 import com.kodilla.frontend.ui.Form.ChronicDisease_PetForm;
+import com.kodilla.frontend.ui.MainView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -39,12 +41,13 @@ public class ChronicDisease_PetView extends VerticalLayout implements AfterNavig
     private ChronicDisease_PetForm chronicDisease_petForm = new ChronicDisease_PetForm(this);
 
     public ChronicDisease_PetView() {
-        filterText.setPlaceholder("Filter by name...");
+        filterText.setPrefixComponent(VaadinIcon.SEARCH.create());
+        filterText.setPlaceholder("Filter by last name...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.EAGER);
         configureGrid();
 
-        Button addNewChronicDiseaseBtn = new Button("Add new chronicDisease");
+        Button addNewChronicDiseaseBtn = new Button("Add new chronicDisease",VaadinIcon.PLUS_CIRCLE.create());
         addNewChronicDiseaseBtn.addClickListener(e -> {
             grid.asSingleSelect().clear();
             chronicDisease_petForm.setChronicDisease_Pet(new ChronicDisease_Pet());

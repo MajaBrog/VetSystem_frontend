@@ -3,7 +3,7 @@ package com.kodilla.frontend.ui.Form;
 
         import com.kodilla.frontend.client.VetSystemClient;
         import com.kodilla.frontend.domain.Visit;
-        import com.kodilla.frontend.ui.VisitView;
+        import com.kodilla.frontend.ui.EntityView.VisitView;
         import com.vaadin.flow.component.Key;
         import com.vaadin.flow.component.button.Button;
         import com.vaadin.flow.component.button.ButtonVariant;
@@ -73,7 +73,7 @@ public class VisitForm extends FormLayout {
 
     private void setAddVaccination(){
         visit = binder.getBean();
-        visitView.addMedication(visit.getId());
+        visitView.addVaccination(visit.getId());
         visitView.refresh();
     }
 
@@ -107,8 +107,15 @@ public class VisitForm extends FormLayout {
     }
     private void saveWithoutClosing() {
         visit = binder.getBean();
+        System.out.println(visit);
         visit.setPetId(visitView.getPetId());
-        vetSystemClient.createVisit(visit);
+        if(visit.getId()==null) {
+            Visit newVisit = vetSystemClient.createVisit(visit);
+            setVisit(newVisit);
+        }else{
+            vetSystemClient.updateVisit(visit);
+            setVisit(visit);
+        }
         visitView.refresh();
     }
 
@@ -117,6 +124,7 @@ public class VisitForm extends FormLayout {
         visit.setPetId(visitView.getPetId());
         vetSystemClient.deleteVisit(visit);
         visitView.refresh();
+        setVisit(null);
     }
 
     private void close() {
